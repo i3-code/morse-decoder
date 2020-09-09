@@ -38,7 +38,33 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
+    // Разбиваем строку на массив, каждый элемент которого равен 10 символам из строки.
+    let arr = [];
+    for (let i=0; i < expr.length; i += 10) {
+        arr.push(expr.substr(i, 10));
+    }
+
+    // Перебираем каждый элемент массива для поиска соответствия
+    let str = '';
+    for (let i of arr) {
+        if (i == '**********') {
+            // Если пробел, то сразу добавляем его к результату.
+            str += ' ';
+        } else {
+            let line = i.split('').join('');
+            // Удаляем лишние нули в начале строки
+            line = line.replace(/00/ig,'');
+            // Преобразовываем каждую пару цифр из элемента массива в . или -
+            let currSymbol = '';
+            for (let j=0; j< line.length; j += 2) {
+                currSymbol += (line.substr(j, 2) == '10') ? '.' : '-';
+            }
+            // Добавляем к результату значение из основной таблицы, соответствующее нашему набору . и -
+            str += MORSE_TABLE[currSymbol];
+        }
+    }
+    // Возвращем результат.
+    return str;
 }
 
 module.exports = {
